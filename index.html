@@ -63,8 +63,8 @@
   .hero { padding: 56px 0 40px; }
   .eyebrow {
     display: inline-block; font-family: var(--font-mono); font-size: 12.5px;
-    letter-spacing: 0.04em; color: var(--red-pen); background: #fbeeed;
-    border: 1px solid #e8b3ad; padding: 5px 11px; border-radius: 999px;
+    letter-spacing: 0.04em; color: var(--brand-600); background: var(--paper-100);
+    border: 1px solid var(--paper-200); padding: 5px 11px; border-radius: 999px;
     margin-bottom: 22px;
   }
   .hero h1 {
@@ -165,8 +165,9 @@
   /* ---------- SCREENSHOTS ---------- */
   .screenshot-frame {
     border: 1px solid var(--paper-200); border-radius: 12px; overflow: hidden; background: white;
+    display: flex; align-items: center; justify-content: center; padding: 8px;
   }
-  .screenshot-frame img { display: block; width: 100%; height: auto; }
+  .screenshot-frame img { display: block; width: auto; max-width: 100%; height: auto; }
   .screenshot-placeholder {
     border: 2px dashed var(--paper-200); border-radius: 12px; padding: 40px 20px; text-align: center;
     color: var(--ink-600); font-size: 14px; background: var(--paper-100);
@@ -192,7 +193,42 @@
   .mockup td.grade.pass { color: var(--brand-600); }
   .mockup td.grade.miss { color: var(--red-pen); background: #fbeeed; font-weight: 600; }
 
-  /* ---------- FINAL CTA ---------- */
+  /* ---------- PERFORMANCE MOCKUP ---------- */
+  .perf-mockup {
+    background: white; border: 1px solid var(--paper-200); border-radius: 14px; padding: 24px;
+  }
+  .perf-mockup .perf-header {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;
+  }
+  .perf-mockup .perf-title { font-family: var(--font-display); font-weight: 600; font-size: 15px; }
+  .perf-mockup .perf-hide { color: var(--gold); font-size: 13px; }
+  .perf-stats { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 6px; }
+  .perf-stat .num { font-family: var(--font-mono); font-weight: 600; font-size: 24px; color: var(--ink-900); }
+  .perf-stat .lbl { font-size: 12px; color: var(--ink-600); margin-top: 2px; }
+  .perf-note { font-size: 12.5px; color: var(--ink-600); margin: 4px 0 20px; }
+  .perf-mockup .dist-title { font-family: var(--font-display); font-weight: 600; font-size: 13.5px; margin-bottom: 14px; }
+  .dist-chart { display: flex; align-items: flex-end; gap: 6px; height: 90px; }
+  .dist-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+  .dist-count { font-family: var(--font-mono); font-size: 11px; color: var(--ink-600); margin-bottom: 4px; height: 14px; }
+  .dist-bar { width: 100%; background: var(--brand-600); border-radius: 3px 3px 0 0; }
+  .dist-axis { border-top: 1px solid var(--paper-200); width: 100%; margin-top: 6px; }
+  .dist-pct { font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-600); margin-top: 4px; }
+
+  /* ---------- ANSWER BREAKDOWN MOCKUP ---------- */
+  .answer-mockup {
+    background: white; border: 1px solid var(--paper-200); border-radius: 14px; overflow: hidden;
+  }
+  .answer-mockup table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .answer-mockup th { text-align: left; padding: 11px 16px; font-weight: 600; color: var(--ink-600); border-bottom: 1px solid var(--paper-200); }
+  .answer-mockup td { padding: 11px 16px; border-bottom: 1px solid var(--paper-100); font-family: var(--font-mono); }
+  .answer-mockup tr:last-child td { border-bottom: none; }
+  .answer-mockup tr.correct td { background: #ecf5f0; }
+  .answer-mockup .mark { font-family: var(--font-body); margin-right: 8px; }
+  .answer-mockup .mark.no { color: var(--ink-600); }
+  .answer-mockup .mark.yes { color: var(--brand-600); }
+  .answer-mockup td.letter { font-family: var(--font-body); font-weight: 500; }
+
+
   .final-cta {
     background: var(--brand-600); border-radius: 18px; padding: 44px 40px; margin: 20px 0 60px;
     color: white; text-align: center;
@@ -334,14 +370,45 @@
       <h2>Real quiz data, built right into the gradebook — not a separate tool.</h2>
       <div class="screenshot-grid">
         <div>
-          <div class="screenshot-frame">
-            <img src="class-performance.png" alt="Class performance panel showing high, low, mean, and median score plus a score distribution chart" />
+          <div class="perf-mockup">
+            <div class="perf-header">
+              <span class="perf-title">Class performance</span>
+              <span class="perf-hide">Hide</span>
+            </div>
+            <div class="perf-stats">
+              <div class="perf-stat"><div class="num">100%</div><div class="lbl">High Score</div></div>
+              <div class="perf-stat"><div class="num">70%</div><div class="lbl">Low Score</div></div>
+              <div class="perf-stat"><div class="num">85%</div><div class="lbl">Mean Score</div></div>
+              <div class="perf-stat"><div class="num">85%</div><div class="lbl">Median Score</div></div>
+            </div>
+            <p class="perf-note">2 students graded (best attempt each)</p>
+            <p class="dist-title">Score Distribution</p>
+            <div class="dist-chart">
+              <div class="dist-bar-wrap"><div class="dist-count"></div><div class="dist-bar" style="height:0"></div><div class="dist-axis"></div><div class="dist-pct">0%</div></div>
+              <div class="dist-bar-wrap"><div class="dist-count"></div><div class="dist-bar" style="height:0"></div><div class="dist-axis"></div><div class="dist-pct">10%</div></div>
+              <div class="dist-bar-wrap"><div class="dist-count"></div><div class="dist-bar" style="height:0"></div><div class="dist-axis"></div><div class="dist-pct">20%</div></div>
+              <div class="dist-bar-wrap"><div class="dist-count"></div><div class="dist-bar" style="height:0"></div><div class="dist-axis"></div><div class="dist-pct">30%</div></div>
+              <div class="dist-bar-wrap"><div class="dist-count"></div><div class="dist-bar" style="height:0"></div><div class="dist-axis"></div><div class="dist-pct">40%</div></div>
+              <div class="dist-bar-wrap"><div class="dist-count"></div><div class="dist-bar" style="height:0"></div><div class="dist-axis"></div><div class="dist-pct">50%</div></div>
+              <div class="dist-bar-wrap"><div class="dist-count"></div><div class="dist-bar" style="height:0"></div><div class="dist-axis"></div><div class="dist-pct">60%</div></div>
+              <div class="dist-bar-wrap"><div class="dist-count">1</div><div class="dist-bar" style="height:60px"></div><div class="dist-axis"></div><div class="dist-pct">70%</div></div>
+              <div class="dist-bar-wrap"><div class="dist-count"></div><div class="dist-bar" style="height:0"></div><div class="dist-axis"></div><div class="dist-pct">80%</div></div>
+              <div class="dist-bar-wrap"><div class="dist-count">1</div><div class="dist-bar" style="height:60px"></div><div class="dist-axis"></div><div class="dist-pct">90%</div></div>
+            </div>
           </div>
           <p class="screenshot-caption">Class performance, calculated instantly for every quiz</p>
         </div>
         <div>
-          <div class="screenshot-frame">
-            <img src="question-breakdown.png" alt="Per-question answer breakdown showing how many students picked each answer choice" />
+          <div class="answer-mockup">
+            <table>
+              <thead><tr><th>Answer</th><th>Respondents</th><th>%</th></tr></thead>
+              <tbody>
+                <tr><td class="letter"><span class="mark no">✕</span>A</td><td>0</td><td>0%</td></tr>
+                <tr class="correct"><td class="letter"><span class="mark yes">✓</span>B</td><td>3</td><td>100%</td></tr>
+                <tr><td class="letter"><span class="mark no">✕</span>C</td><td>0</td><td>0%</td></tr>
+                <tr><td class="letter"><span class="mark no">✕</span>D</td><td>0</td><td>0%</td></tr>
+              </tbody>
+            </table>
           </div>
           <p class="screenshot-caption">See exactly which answer every student picked, question by question</p>
         </div>
