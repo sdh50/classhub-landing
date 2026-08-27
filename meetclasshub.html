@@ -1,0 +1,639 @@
+<title>Meet ClassHub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,600&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --paper:#EEF1EA; --surface:#F7F9F3; --surface-2:#FbFcF8;
+  --ink:#16231C; --ink-soft:#3B4A42; --muted:#6C7A72;
+  --line:#D4DBD0; --line-soft:#E2E7DD;
+  --brand:#1C7A4C; --brand-bright:#34B36A; --brand-ghost:rgba(28,122,76,.10);
+  --amber:#C98A16; --amber-ghost:rgba(224,165,38,.16);
+  --danger:#B24B39; --danger-ghost:rgba(178,75,57,.13);
+  --shadow:0 1px 2px rgba(20,35,28,.06),0 10px 30px rgba(20,35,28,.09);
+  --shadow-lg:0 2px 6px rgba(20,35,28,.08),0 24px 60px rgba(20,35,28,.16);
+}
+:root:not([data-theme="light"]){
+  @media (prefers-color-scheme: dark){
+  --paper:#0E1613; --surface:#152019; --surface-2:#1A271F;
+  --ink:#E9F0E9; --ink-soft:#B7C5BB; --muted:#7C8D82;
+  --line:#26362D; --line-soft:#1E2C24;
+  --brand:#37B26B; --brand-bright:#5CD98C; --brand-ghost:rgba(55,178,107,.13);
+  --amber:#E9B646; --amber-ghost:rgba(233,182,70,.14);
+  --danger:#E0745C; --danger-ghost:rgba(224,116,92,.17);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 34px rgba(0,0,0,.4);
+  --shadow-lg:0 2px 6px rgba(0,0,0,.35),0 30px 70px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0E1613; --surface:#152019; --surface-2:#1A271F;
+  --ink:#E9F0E9; --ink-soft:#B7C5BB; --muted:#7C8D82;
+  --line:#26362D; --line-soft:#1E2C24;
+  --brand:#37B26B; --brand-bright:#5CD98C; --brand-ghost:rgba(55,178,107,.13);
+  --amber:#E9B646; --amber-ghost:rgba(233,182,70,.14);
+  --danger:#E0745C; --danger-ghost:rgba(224,116,92,.17);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 34px rgba(0,0,0,.4);
+  --shadow-lg:0 2px 6px rgba(0,0,0,.35),0 30px 70px rgba(0,0,0,.5);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Public Sans",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased; overflow:hidden;
+}
+.stage{
+  position:relative; width:100%; height:100svh; min-height:520px; overflow:hidden;
+  background:
+    linear-gradient(var(--line-soft) 1px,transparent 1px) 0 0/100% 46px,
+    linear-gradient(90deg,var(--line-soft) 1px,transparent 1px) 0 0/46px 100%,
+    var(--paper);
+}
+.stage::before{ /* soft vignette to focus center */
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 42%,transparent 55%,color-mix(in srgb,var(--paper) 78%,var(--ink)) 140%);
+  opacity:.5;
+}
+
+/* persistent brand mark */
+.wordmark{
+  position:absolute; top:clamp(18px,3.4vh,34px); left:clamp(20px,4vw,54px);
+  display:flex; align-items:center; gap:11px; z-index:6;
+}
+.mark{
+  width:34px;height:34px;border-radius:9px;flex:none;
+  background:linear-gradient(150deg,var(--brand-bright),var(--brand));
+  display:grid;place-items:center;color:#fff;
+  font-family:"Fraunces",serif;font-weight:600;font-size:22px;line-height:1;
+  box-shadow:0 3px 10px var(--brand-ghost);
+}
+.mark span{transform:translateY(1px)}
+.wordmark b{font-weight:700;letter-spacing:-.01em;font-size:19px}
+.wordmark b i{color:var(--brand);font-style:normal}
+
+/* scenes */
+.scenes{position:absolute;inset:0}
+.scene{
+  position:absolute; inset:0; display:grid; place-items:center;
+  padding:clamp(64px,10vh,120px) clamp(22px,6vw,90px) clamp(96px,14vh,140px);
+  opacity:0; visibility:hidden; transform:scale(.992);
+  transition:opacity .6s ease,transform .6s ease,visibility 0s .6s;
+}
+.scene.active{opacity:1;visibility:visible;transform:none;transition:opacity .7s ease,transform .7s ease}
+.wrap{width:min(1120px,100%);margin:0 auto}
+
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--brand);
+  display:inline-flex;align-items:center;gap:10px;margin:0 0 18px;
+}
+.eyebrow .n{color:var(--muted)}
+.eyebrow .bar{width:26px;height:1px;background:var(--line);display:inline-block}
+
+h1.big{
+  font-family:"Fraunces",serif;font-weight:600;line-height:1.02;
+  letter-spacing:-.02em;text-wrap:balance;margin:0;
+  font-size:clamp(38px,7.2vw,86px);
+}
+h2.lead{
+  font-family:"Fraunces",serif;font-weight:500;line-height:1.05;
+  letter-spacing:-.015em;text-wrap:balance;margin:0;
+  font-size:clamp(30px,5.2vw,62px);
+}
+.lead em{font-style:italic;color:var(--brand)}
+.hl{background:linear-gradient(transparent 62%,var(--amber-ghost) 62%);padding:0 .06em}
+.sub{
+  font-size:clamp(16px,2.05vw,21px);line-height:1.5;color:var(--ink-soft);
+  max-width:56ch;margin:22px 0 0;
+}
+.kicker{color:var(--muted);font-size:15px;margin-top:26px;font-weight:500}
+
+/* two-column scene layout */
+.split{display:grid;grid-template-columns:1.02fr 1fr;gap:clamp(30px,5vw,72px);align-items:center;width:100%}
+.split.rev{grid-template-columns:1fr 1.02fr}
+.copy{min-width:0}
+
+/* staggered reveal */
+.anim{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s ease}
+.scene.active .anim{opacity:1;transform:none}
+.scene.active .anim{transition-delay:calc(var(--i,0)*90ms + 120ms)}
+@media (prefers-reduced-motion: reduce){
+  .scene,.scene.active{transition:opacity .001s}
+  .anim{opacity:1;transform:none;transition:none}
+  .stage *{animation:none!important}
+}
+
+/* ---- generic UI mock ---- */
+.panel{
+  background:var(--surface);border:1px solid var(--line);border-radius:16px;
+  box-shadow:var(--shadow-lg);overflow:hidden;
+}
+.panel-hd{
+  display:flex;align-items:center;gap:9px;padding:12px 15px;border-bottom:1px solid var(--line);
+  background:var(--surface-2);
+}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.panel-hd .ttl{margin-left:8px;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);letter-spacing:.02em}
+.mono{font-family:"IBM Plex Mono",monospace}
+
+/* chips / pills */
+.pill{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;
+  font-size:13px;font-weight:600;border:1px solid var(--line);background:var(--surface);color:var(--ink-soft)}
+.pill.brand{color:var(--brand);border-color:color-mix(in srgb,var(--brand) 32%,var(--line));background:var(--brand-ghost)}
+.pill svg{width:14px;height:14px}
+.pillrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+
+.feat{display:flex;gap:13px;align-items:flex-start;margin-top:16px}
+.feat .ic{flex:none;width:30px;height:30px;border-radius:8px;background:var(--brand-ghost);color:var(--brand);
+  display:grid;place-items:center}
+.feat .ic svg{width:17px;height:17px}
+.feat h4{margin:2px 0 3px;font-size:16.5px;font-weight:700;letter-spacing:-.01em}
+.feat p{margin:0;font-size:14.5px;line-height:1.45;color:var(--muted)}
+svg{stroke-linecap:round;stroke-linejoin:round}
+
+/* ---- scene 3: modules ---- */
+.mods{padding:14px}
+.modrow{display:flex;align-items:center;gap:12px;padding:13px 12px;border-radius:11px;border:1px solid var(--line-soft);margin-bottom:9px;background:var(--surface-2)}
+.modrow.on{border-color:color-mix(in srgb,var(--brand) 30%,var(--line));background:var(--brand-ghost)}
+.grip{color:var(--muted);flex:none;display:grid}
+.grip svg{width:16px;height:16px}
+.modrow .mt{font-weight:600;font-size:15px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.modrow .mday{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--muted)}
+.modrow.hidden{opacity:.55}
+.eye{flex:none;color:var(--muted);display:grid}.eye svg{width:17px;height:17px}
+.hidebadge{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);border:1px solid var(--amber-ghost);background:var(--amber-ghost);padding:3px 7px;border-radius:6px}
+
+/* ---- scene 4: quiz ---- */
+.quiz{padding:20px}
+.qn{font-family:"Fraunces",serif;font-size:19px;font-weight:500;margin:0 0 15px;line-height:1.25}
+.opt{display:flex;align-items:center;gap:11px;padding:12px 14px;border-radius:11px;border:1px solid var(--line);margin-bottom:9px;background:var(--surface-2);font-size:15px;font-weight:500;transition:.4s}
+.opt .k{width:22px;height:22px;border-radius:6px;border:1px solid var(--line);display:grid;place-items:center;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);flex:none}
+.opt.correct{border-color:var(--brand);background:var(--brand-ghost)}
+.opt.correct .k{background:var(--brand);border-color:var(--brand);color:#fff}
+.opt.drag{border-style:dashed;border-color:color-mix(in srgb,var(--brand) 45%,var(--line));box-shadow:var(--shadow);transform:translateX(4px)}
+
+/* ---- scene 5: gradebook ---- */
+.gb{padding:6px 0 2px}
+.gb table{border-collapse:collapse;width:100%;font-size:13px}
+.gb th,.gb td{padding:9px 6px;text-align:center;border-bottom:1px solid var(--line-soft)}
+.gb th{font-family:"IBM Plex Mono",monospace;font-weight:500;font-size:10.5px;letter-spacing:.03em;color:var(--muted);text-transform:uppercase}
+.gb td.name{text-align:left;font-weight:600;padding-left:16px;white-space:nowrap;color:var(--ink)}
+.gb td.g{font-family:"IBM Plex Mono",monospace;font-weight:500;color:var(--ink-soft)}
+.gb td.cyc{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--brand)}
+.gb tr:last-child td{border-bottom:none}
+.dash{color:var(--muted)}
+.zero{color:var(--danger);font-weight:600}
+.cellflip{position:relative;display:inline-block;min-width:2ch}
+
+/* weighting bar */
+.wbar{display:flex;height:12px;border-radius:6px;overflow:hidden;border:1px solid var(--line);margin-top:4px}
+.wbar i{display:block;height:100%}
+.wbar .d{background:var(--brand)}
+.wbar .t{background:var(--amber)}
+
+/* ---- scene 6: roles ---- */
+.roles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.role{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 16px;box-shadow:var(--shadow)}
+.role .ic{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:var(--brand-ghost);color:var(--brand);margin-bottom:12px}
+.role .ic svg{width:19px;height:19px}
+.role h4{margin:0 0 5px;font-size:16px;font-weight:700}
+.role p{margin:0;font-size:13px;line-height:1.4;color:var(--muted)}
+.role.mid .ic{background:var(--amber-ghost);color:var(--amber)}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:30px}
+@media(max-width:900px){.grid4{grid-template-columns:1fr 1fr}}
+@media(max-width:440px){.grid4{grid-template-columns:1fr}}
+
+/* period/group tags */
+.tagset{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.tg{font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;font-family:"IBM Plex Mono",monospace;letter-spacing:.01em}
+.tg.period{color:var(--brand);background:var(--brand-ghost);border:1px solid color-mix(in srgb,var(--brand) 30%,var(--line))}
+.tg.group{color:var(--amber);background:var(--amber-ghost);border:1px solid color-mix(in srgb,var(--amber) 30%,var(--line))}
+
+/* ---- real-time mastery board ---- */
+.live{display:inline-flex;align-items:center;gap:7px;margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.12em;color:var(--muted)}
+.live b{width:7px;height:7px;border-radius:50%;background:var(--brand);display:inline-block;animation:pulse 1.7s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+.mastery{padding:17px 18px}
+.mtop{display:flex;align-items:baseline;justify-content:space-between;font-size:13px;color:var(--muted);font-family:"IBM Plex Mono",monospace}
+.mtop b{color:var(--ink);font-size:15px}
+.mbar{display:flex;gap:2px;height:15px;margin:12px 0 12px}
+.mbar i{display:block;height:100%;border-radius:3px}
+.mbar .ok{background:var(--brand)} .mbar .warn{background:var(--amber)} .mbar .crit{background:var(--danger)}
+.mlegend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:12.5px;color:var(--ink-soft);font-weight:500}
+.mlegend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:10px;height:10px;border-radius:3px;display:inline-block}
+.sw.ok{background:var(--brand)} .sw.warn{background:var(--amber)} .sw.crit{background:var(--danger)}
+.mchips{display:grid;gap:7px;margin-top:15px}
+.mchip{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:9px;border:1px solid var(--line);background:var(--surface-2);font-size:13.5px;font-weight:600}
+.stat{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;padding:3px 9px 3px 7px;border-radius:999px}
+.stat svg{width:13px;height:13px}
+.stat.ok{color:var(--brand);background:var(--brand-ghost)}
+.stat.warn{color:var(--amber);background:var(--amber-ghost)}
+.stat.crit{color:var(--danger);background:var(--danger-ghost)}
+.callout{margin-top:15px;padding:12px 14px;border-radius:11px;background:var(--brand-ghost);
+  border:1px solid color-mix(in srgb,var(--brand) 26%,var(--line));color:var(--brand);
+  font-weight:700;font-size:14px;display:flex;align-items:center;gap:10px}
+.callout svg{width:17px;height:17px;flex:none}
+.link{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--muted)}
+.link .code{color:var(--brand);border:1px dashed color-mix(in srgb,var(--brand) 40%,var(--line));padding:3px 9px;border-radius:7px;background:var(--brand-ghost);font-weight:600}
+
+/* ---- scene 7: migration ---- */
+.migrate{display:flex;align-items:center;justify-content:center;gap:clamp(14px,3vw,34px);flex-wrap:wrap}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);text-align:center;min-width:170px}
+.box.from{opacity:.9}
+.box .lab{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.box .file{font-weight:700;font-size:16px}
+.box ul{margin:12px 0 0;padding:0;list-style:none;text-align:left;font-size:13px;color:var(--ink-soft)}
+.box li{display:flex;gap:8px;align-items:center;padding:4px 0}
+.box li svg{width:14px;height:14px;color:var(--brand);flex:none}
+.flow{display:grid;place-items:center;color:var(--brand)}
+.flow svg{width:46px;height:46px}
+.flow .fl{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);margin-top:6px}
+
+/* ---- scene 8: close ---- */
+.close-wrap{text-align:center}
+.close-wrap .mark{width:60px;height:60px;font-size:38px;border-radius:15px;margin:0 auto 26px}
+.cta{display:inline-flex;align-items:center;gap:10px;margin-top:30px;background:var(--brand);color:#fff;
+  font-weight:700;font-size:16px;padding:14px 26px;border-radius:12px;box-shadow:0 8px 24px var(--brand-ghost);
+  border:none;text-decoration:none}
+.cta svg{width:18px;height:18px}
+.signup{margin-top:18px;font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--muted)}
+.signup b{color:var(--ink-soft);font-weight:600}
+
+/* ---------- player bar ---------- */
+.player{
+  position:absolute;left:0;right:0;bottom:0;z-index:7;
+  padding:clamp(14px,2.4vh,22px) clamp(20px,5vw,54px) clamp(16px,2.6vh,24px);
+  display:flex;flex-direction:column;gap:12px;
+  background:linear-gradient(transparent,color-mix(in srgb,var(--paper) 86%,transparent) 40%,var(--paper));
+}
+.track{display:flex;gap:6px;width:100%}
+.seg{flex:1;height:4px;border-radius:99px;background:var(--line);overflow:hidden;cursor:pointer;position:relative}
+.seg i{position:absolute;inset:0;width:0;background:var(--brand);border-radius:99px}
+.seg.done i{width:100%}
+.controls{display:flex;align-items:center;gap:16px}
+.btn{background:none;border:none;color:var(--ink);cursor:pointer;display:grid;place-items:center;padding:6px;border-radius:9px;transition:.2s}
+.btn:hover{background:var(--brand-ghost);color:var(--brand)}
+.btn:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.btn svg{width:20px;height:20px;fill:currentColor}
+.controls .idx{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--muted);margin-left:2px}
+.controls .idx b{color:var(--ink)}
+.controls .title{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted);letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:44vw}
+.replay{display:none}
+
+@media (max-width:760px){
+  .split,.split.rev{grid-template-columns:1fr;gap:26px}
+  .visual{order:-1}
+  .roles{grid-template-columns:1fr 1fr}
+  .controls .title{display:none}
+  .scene{padding-top:76px}
+}
+@media (max-width:460px){
+  .roles{grid-template-columns:1fr}
+}
+</style>
+
+<div class="stage">
+  <div class="wordmark"><div class="mark"><span>C</span></div><b>Class<i>hub</i></b></div>
+
+  <div class="scenes" id="scenes">
+
+    <!-- 1. TITLE -->
+    <section class="scene" data-title="Cold open">
+      <div class="wrap" style="text-align:center">
+        <div class="eyebrow anim" style="--i:0"><span class="bar"></span> A classroom LMS, rebuilt <span class="bar"></span></div>
+        <h1 class="big anim" style="--i:1">The class hub your<br>LMS forgot to be.</h1>
+        <p class="sub anim" style="--i:2;margin-left:auto;margin-right:auto">Built by a teacher, for the way a week actually runs —
+          modules, quizzes, and a gradebook that behave the way you'd expect. No bloat. All class.</p>
+        <div class="pillrow anim" style="--i:3;justify-content:center">
+          <span class="pill brand">Teacher-built</span>
+          <span class="pill">Canvas import</span>
+          <span class="pill">Parents &amp; co-teachers</span>
+          <span class="pill">Live &amp; hosted</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. PROBLEM -->
+    <section class="scene" data-title="The gap">
+      <div class="wrap">
+        <p class="eyebrow anim" style="--i:0"><span class="n">01</span> · The gap</p>
+        <h2 class="lead anim" style="--i:1">Posting the work is<br>the <em>easy part.</em></h2>
+        <p class="sub anim" style="--i:2">Google Classroom hands out assignments and collects them back — then leaves the grading, the quiz data, the weighting, and the parent updates to a spreadsheet and a stack of sticky notes. If you've got no real LMS for teachers, your school is already behind in closing the gaps in student growth.</p>
+        <p class="sub anim" style="--i:3;margin-top:14px">ClassHub gives teachers the real gradebook, the live quiz data, and the parent visibility Classroom never did — so no student's growth slips through the cracks.</p>
+        <div class="pillrow anim" style="--i:4">
+          <span class="pill">A real gradebook</span>
+          <span class="pill">Quiz data, not just turn-ins</span>
+          <span class="pill">Parents built in</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. COURSE CONTENT -->
+    <section class="scene" data-title="Course content">
+      <div class="wrap"><div class="split">
+        <div class="copy">
+          <p class="eyebrow anim" style="--i:0"><span class="n">02</span> · Course content</p>
+          <h2 class="lead anim" style="--i:1">Plan the week.<br>Reveal it when you're ready.</h2>
+          <div class="feat anim" style="--i:2"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="10" width="18" height="4" rx="1"/><rect x="3" y="16" width="18" height="4" rx="1"/></svg></div>
+            <div><h4>Modules &amp; Days, drag to reorder</h4><p>Structure the unit, then drag modules, days, and items into place.</p></div></div>
+          <div class="feat anim" style="--i:3"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><path d="m4 4 16 16" stroke-width="2"/></svg></div>
+            <div><h4>Show / hide at any level</h4><p>Next week sits ready but hidden until you flip it on.</p></div></div>
+          <div class="feat anim" style="--i:4"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m8 12 3 3 5-6"/></svg></div>
+            <div><h4>Paste a screenshot, done</h4><p>Copy from the Snipping Tool and paste straight into a page — no upload step.</p></div></div>
+        </div>
+        <div class="visual anim" style="--i:2">
+          <div class="panel"><div class="panel-hd"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="ttl">Unit 2 · Linear Functions</span></div>
+            <div class="mods">
+              <div class="modrow on"><span class="grip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/></svg></span><span class="mt">Day 1 · Slope from a graph</span><span class="mday">4 items</span></div>
+              <div class="modrow"><span class="grip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/></svg></span><span class="mt">Day 2 · Writing y = mx + b</span><span class="mday">3 items</span></div>
+              <div class="modrow hidden"><span class="grip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/></svg></span><span class="mt">Day 3 · Systems quiz</span><span class="hidebadge">Hidden</span><span class="eye"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><path d="m3 3 18 18"/></svg></span></div>
+            </div>
+          </div>
+        </div>
+      </div></div>
+    </section>
+
+    <!-- 4. QUIZZES -->
+    <section class="scene" data-title="Quizzes">
+      <div class="wrap"><div class="split rev">
+        <div class="visual anim" style="--i:2">
+          <div class="panel"><div class="panel-hd"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="ttl">Quiz · Slope &amp; rate of change</span></div>
+            <div class="quiz">
+              <p class="qn">Which line has the steepest slope?</p>
+              <div class="opt"><span class="k">A</span> y = 2x + 1</div>
+              <div class="opt drag correct"><span class="k">B</span> y = 5x − 3</div>
+              <div class="opt"><span class="k">C</span> y = ½x + 4</div>
+              <div style="display:flex;gap:9px;margin-top:14px;flex-wrap:wrap">
+                <span class="pill brand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 6"/></svg> Auto-saved</span>
+                <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> 1st 8:00 · 2nd 9:15</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="copy">
+          <p class="eyebrow anim" style="--i:0"><span class="n">03</span> · Quizzes</p>
+          <h2 class="lead anim" style="--i:1">Quizzes that respect<br>the room.</h2>
+          <p class="sub anim" style="--i:2">Five ways to ask — multiple choice, select-all, fill-in-the-blank, short answer, and drag-the-answer with a tap fallback.</p>
+          <div class="feat anim" style="--i:3"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+            <div><h4>Unlock by period, on the clock</h4><p>The same exam opens for 1st at 8:00 and 2nd at 9:15 — enforced on the server, not just hidden.</p></div></div>
+          <div class="feat anim" style="--i:4"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg></div>
+            <div><h4>Auto-save &amp; retakes</h4><p>Answers save as they go; set 1–10 attempts. Objective types auto-grade, short answer takes your comments.</p></div></div>
+        </div>
+      </div></div>
+    </section>
+
+    <!-- 5. REAL-TIME DATA -->
+    <section class="scene" data-title="Real-time understanding">
+      <div class="wrap"><div class="split">
+        <div class="copy">
+          <p class="eyebrow anim" style="--i:0"><span class="n">04</span> · Real-time data</p>
+          <h2 class="lead anim" style="--i:1">Know the room<br>before the <em>bell rings.</em></h2>
+          <p class="sub anim" style="--i:2">Objective questions grade themselves the second a student hits submit — and the gradebook moves in real time. You walk out of class already knowing who's got it and who needs another pass.</p>
+          <div class="feat anim" style="--i:3"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4"/><circle cx="12" cy="12" r="3.2"/></svg></div>
+            <div><h4>Auto-graded on submit</h4><p>Multiple choice, select-all, and fill-in score instantly — no red pen, no waiting until tonight.</p></div></div>
+          <div class="feat anim" style="--i:4"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M17 5a3 3 0 0 1 0 6"/></svg></div>
+            <div><h4>Plan while it's fresh</h4><p>Turn today's results into tomorrow's small groups and tutoring list — before students leave the room.</p></div></div>
+        </div>
+        <div class="visual anim" style="--i:2">
+          <div class="panel"><div class="panel-hd"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="ttl">Exit ticket · 8.5A Slope</span><span class="live"><b></b> LIVE</span></div>
+            <div class="mastery">
+              <div class="mtop"><span>Auto-graded, updating live</span><b>24 / 26 in</b></div>
+              <div class="mbar"><i class="ok" style="width:61%"></i><i class="warn" style="width:23%"></i><i class="crit" style="width:16%"></i></div>
+              <div class="mlegend"><span><i class="sw ok"></i> Got it · 16</span><span><i class="sw warn"></i> Shaky · 6</span><span><i class="sw crit"></i> Reteach · 4</span></div>
+              <div class="mchips">
+                <div class="mchip"><span>N. Luna-Santiago</span><span class="stat ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="m5 12 5 5L20 6"/></svg> Got it</span></div>
+                <div class="mchip"><span>E. Sapp</span><span class="stat warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14"/></svg> Shaky</span></div>
+                <div class="mchip"><span>E. Garza</span><span class="stat crit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 8v5M12 16.5v.5"/><path d="M10.3 4 3 17a2 2 0 0 0 1.7 3h14.6a2 2 0 0 0 1.7-3L13.7 4a2 2 0 0 0-3.4 0Z"/></svg> Reteach</span></div>
+              </div>
+              <div class="callout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg> 4 students → slope reteach group · Thursday tutorial</div>
+            </div>
+          </div>
+        </div>
+      </div></div>
+    </section>
+
+    <!-- 6. GRADEBOOK (signature) -->
+    <section class="scene" data-title="The fair gradebook">
+      <div class="wrap"><div class="split">
+        <div class="copy">
+          <p class="eyebrow anim" style="--i:0"><span class="n">05</span> · Gradebook</p>
+          <h2 class="lead anim" style="--i:1">A gradebook that's<br><em>fair by default.</em></h2>
+          <p class="sub anim" style="--i:2">Missing work shows a <span class="hl mono">—</span> for the whole due date and only turns into a
+            <span class="mono" style="color:var(--danger);font-weight:600">0</span> the day <em>after</em> — so a kid isn't failing at 8am on the day it's assigned.</p>
+          <div class="feat anim" style="--i:3"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="5" width="3" height="13"/></svg></div>
+            <div><h4>Weighted Daily &amp; Test, per cycle</h4><p>Filter by period, group, cycle, or a custom date range. Students see the same breakdown.</p></div></div>
+          <div class="feat anim" style="--i:4"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></div>
+            <div><h4>Import scores in one drop</h4><p>Bring grades in from Wayground or DeltaMath CSV/XLSX — matched by email or name.</p></div></div>
+        </div>
+        <div class="visual anim" style="--i:2">
+          <div class="panel"><div class="panel-hd"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="ttl">Gradebook · 1st period · Cycle 1</span></div>
+            <div class="gb" style="padding:6px 4px 10px">
+              <table>
+                <thead><tr><th style="text-align:left;padding-left:16px">Student</th><th>Cycle</th><th>8/18</th><th>8/19</th><th>8/20</th></tr></thead>
+                <tbody>
+                  <tr><td class="name">D. Alvarez</td><td class="cyc">89%</td><td class="g">100</td><td class="g">90</td><td class="g">85</td></tr>
+                  <tr><td class="name">R. Kabwebwe</td><td class="cyc">92%</td><td class="g">100</td><td class="g">90</td><td class="g">75</td></tr>
+                  <tr><td class="name">I. Montoya</td><td class="cyc">87%</td><td class="g">100</td><td class="g">100</td><td class="g"><span class="cellflip" id="flipcell"><span class="dash">—</span></span></td></tr>
+                  <tr><td class="name">E. Sapp</td><td class="cyc">82%</td><td class="g">80</td><td class="g">80</td><td class="g">90</td></tr>
+                </tbody>
+              </table>
+              <div style="padding:12px 16px 4px">
+                <div style="display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted)" class="mono"><span>Daily 50%</span><span>Test 50%</span></div>
+                <div class="wbar"><i class="d" style="width:50%"></i><i class="t" style="width:50%"></i></div>
+              </div>
+            </div>
+          </div>
+          <div style="text-align:center;margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted)" id="flipcap">Due today · shows “—”, not a zero</div>
+        </div>
+      </div></div>
+    </section>
+
+    <!-- 6. ROLES -->
+    <section class="scene" data-title="Everyone in the loop">
+      <div class="wrap">
+        <p class="eyebrow anim" style="--i:0;text-align:center;justify-content:center;display:flex"><span class="n">06</span> · Everyone in the loop</p>
+        <h2 class="lead anim" style="--i:1;text-align:center;margin-bottom:8px">One class, three points of view.</h2>
+        <p class="sub anim" style="--i:2;text-align:center;margin-left:auto;margin-right:auto">Teachers run it, students learn in it, parents can finally see in — without a single extra email from you.</p>
+        <div class="roles anim" style="--i:3;margin-top:30px">
+          <div class="role"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V7l8-4 8 4v12"/><path d="M4 19h16M9 19v-5h6v5"/></svg></div><h4>Teacher</h4><p>Full control. Add a co-teacher for view access without handing over the keys.</p></div>
+          <div class="role mid"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg></div><h4>Student</h4><p>Join by code or Google sign-in. Sees content, quizzes, and their own weighted grades.</p></div>
+          <div class="role"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.2"/><path d="M15.5 20a5 5 0 0 1 6-4"/></svg></div><h4>Parent</h4><p>Links with a private family code — read-only grades for every child, every class.</p></div>
+        </div>
+        <div class="link anim" style="--i:4">Family code <span class="code">SHW-4821</span> links a parent to every class at once</div>
+      </div>
+    </section>
+
+    <!-- 7. DETAILS -->
+    <section class="scene" data-title="The details that add up">
+      <div class="wrap">
+        <p class="eyebrow anim" style="--i:0;text-align:center;justify-content:center;display:flex"><span class="n">07</span> · The details that add up</p>
+        <h2 class="lead anim" style="--i:1;text-align:center;margin-bottom:8px">The small things you only<br>miss when they're gone.</h2>
+        <p class="sub anim" style="--i:2;text-align:center;margin-left:auto;margin-right:auto">The touches that make a Tuesday easier — and that competitors quietly skip.</p>
+        <div class="grid4 anim" style="--i:3">
+          <div class="role"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/></svg></div><h4>Period + group tags</h4><p>A student carries a period tag <em>and</em> a group tag at once — filter by either, overwrite neither.</p><div class="tagset"><span class="tg period">1st Period</span><span class="tg group">Enrichment M/W</span></div></div>
+          <div class="role mid"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M17 5a3 3 0 0 1 0 6M18 20a6 6 0 0 0-3-5"/></svg></div><h4>All students, one view</h4><p>Every student you teach, across every class, in a single roster.</p></div>
+          <div class="role"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="m10 8 5 3-5 3V8Z"/><path d="M8 21h8"/></svg></div><h4>Presenter mode</h4><p>Project any quiz and walk the class through it, slideshow-style.</p></div>
+          <div class="role"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21c3-1 4-6 5-10s2-8 4-8 2 2 2 4"/><path d="M6 13h6M15 12l6 6M21 12l-6 6"/></svg></div><h4>Desmos &amp; references</h4><p>Pin a Desmos calculator — or any link — to a quiz, then bulk-apply it across the whole class.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. MIGRATION -->
+    <section class="scene" data-title="Switch without the pain">
+      <div class="wrap">
+        <p class="eyebrow anim" style="--i:0;justify-content:center;display:flex"><span class="n">08</span> · Switching over</p>
+        <h2 class="lead anim" style="--i:1;text-align:center;margin-bottom:10px">Bring your whole course<br>with you.</h2>
+        <p class="sub anim" style="--i:2;text-align:center;margin:14px auto 34px">Export your Canvas course and drop the <span class="mono">.imscc</span> in. Modules, pages, assignments, and quiz questions land as-is — embedded images and all.</p>
+        <div class="migrate anim" style="--i:3">
+          <div class="box from"><div class="lab">Export</div><div class="file">Canvas course</div><div class="mono" style="font-size:12px;color:var(--muted);margin-top:8px">course.imscc</div></div>
+          <div class="flow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h15m0 0-6-6m6 6-6 6"/></svg><div class="fl">imports in one drop</div></div>
+          <div class="box"><div class="lab">Into ClassHub</div><div class="file">Ready to teach</div>
+            <ul>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 12 5 5L20 6"/></svg> Modules &amp; days</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 12 5 5L20 6"/></svg> Pages &amp; assignments</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 12 5 5L20 6"/></svg> Quiz questions &amp; images</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. CLOSE -->
+    <section class="scene" data-title="Meet ClassHub">
+      <div class="wrap close-wrap">
+        <div class="mark anim" style="--i:0"><span>C</span></div>
+        <h1 class="big anim" style="--i:1;font-size:clamp(40px,8vw,88px)">No bloat.<br>All class.</h1>
+        <p class="sub anim" style="--i:2;margin-left:auto;margin-right:auto">Everything a teacher opens every day — modules, quizzes, and a fair gradebook — in one hub that took a real classroom to design.</p>
+        <a class="cta anim" style="--i:3" href="https://sdh50.github.io/classhub-landing/" target="_blank" rel="noopener">See ClassHub in your class
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg></a>
+        <div class="signup anim" style="--i:4">Try it free · leave your email at <b>sdh50.github.io/classhub-landing</b></div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- player -->
+  <div class="player">
+    <div class="track" id="track"></div>
+    <div class="controls">
+      <button class="btn" id="playBtn" aria-label="Pause">
+        <svg id="playIcon" viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+      </button>
+      <button class="btn" id="prevBtn" aria-label="Previous scene"><svg viewBox="0 0 24 24"><path d="M18 5 8 12l10 7V5Z"/><rect x="5" y="5" width="2.4" height="14" rx="1"/></svg></button>
+      <button class="btn" id="nextBtn" aria-label="Next scene"><svg viewBox="0 0 24 24"><path d="M6 5l10 7L6 19V5Z"/><rect x="16.6" y="5" width="2.4" height="14" rx="1"/></svg></button>
+      <span class="idx"><b id="cur">1</b> / <span id="total">8</span></span>
+      <span class="title" id="sceneTitle">Cold open</span>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var scenes=[].slice.call(document.querySelectorAll('.scene'));
+  var durations=[6500,7000,8500,8500,10000,9500,8000,8500,8000,8000]; // ms per scene
+  var track=document.getElementById('track');
+  var segs=[];
+  scenes.forEach(function(s,i){
+    var seg=document.createElement('div'); seg.className='seg';
+    var fill=document.createElement('i'); seg.appendChild(fill);
+    seg.addEventListener('click',function(){ go(i); });
+    track.appendChild(seg); segs.push({el:seg,fill:fill});
+  });
+  document.getElementById('total').textContent=scenes.length;
+
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var idx=0, paused=false, started=0, acc=0, raf=null, ended=false;
+  var playBtn=document.getElementById('playBtn'), playIcon=document.getElementById('playIcon');
+  var PLAY='<path d="M7 5l12 7L7 19V5Z"/>', PAUSE='<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>';
+
+  function render(){
+    scenes.forEach(function(s,i){ s.classList.toggle('active',i===idx); });
+    segs.forEach(function(s,i){
+      s.el.classList.toggle('done',i<idx);
+      if(i<idx) s.fill.style.width='100%';
+      if(i>idx) s.fill.style.width='0%';
+    });
+    document.getElementById('cur').textContent=idx+1;
+    document.getElementById('sceneTitle').textContent=scenes[idx].getAttribute('data-title');
+  }
+
+  function tick(){
+    if(paused||ended) return;
+    var el=acc+(Date.now()-started);
+    var d=durations[idx];
+    var p=Math.min(1,el/d);
+    segs[idx].fill.style.width=(p*100)+'%';
+    if(el>=d){ next(); return; }
+    raf=requestAnimationFrame(tick);
+  }
+  function startScene(){
+    cancelAnimationFrame(raf); acc=0; started=Date.now();
+    segs[idx].fill.style.width='0%';
+    if(!reduce && !paused && !ended){ raf=requestAnimationFrame(tick); }
+    triggerCell();
+  }
+  function go(i){
+    ended=false; idx=Math.max(0,Math.min(scenes.length-1,i)); render(); setPlayIcon(); startScene();
+    if(reduce){ paused=true; setPlayIcon(); }
+  }
+  function next(){
+    if(idx>=scenes.length-1){ finish(); return; }
+    idx++; render(); startScene();
+  }
+  function prev(){ if(idx>0){ idx--; render(); startScene(); } }
+  function finish(){
+    ended=true; paused=true; cancelAnimationFrame(raf);
+    segs[idx].fill.style.width='100%';
+    playIcon.innerHTML='<path d="M12 5V2L7 7l5 5V9a5 5 0 1 1-5 5H5a7 7 0 1 0 7-9Z" />'; // replay glyph
+    playBtn.setAttribute('aria-label','Replay');
+  }
+  function setPlayIcon(){
+    if(ended) return;
+    playIcon.innerHTML=paused?PLAY:PAUSE;
+    playBtn.setAttribute('aria-label',paused?'Play':'Pause');
+  }
+  function togglePlay(){
+    if(ended){ go(0); paused=false; setPlayIcon(); return; }
+    paused=!paused;
+    if(paused){ acc+=Date.now()-started; cancelAnimationFrame(raf); }
+    else { started=Date.now(); raf=requestAnimationFrame(tick); }
+    setPlayIcon();
+  }
+
+  // scene 5 cell flip
+  var flipT=null;
+  function triggerCell(){
+    clearTimeout(flipT);
+    var cell=document.getElementById('flipcell'), cap=document.getElementById('flipcap');
+    if(!cell) return;
+    cell.innerHTML='<span class="dash">—</span>';
+    if(cap) cap.innerHTML='Due today · shows “—”, not a zero';
+    if(scenes[idx].getAttribute('data-title')==='The fair gradebook' && !reduce){
+      flipT=setTimeout(function(){
+        cell.innerHTML='<span class="zero">0</span>';
+        if(cap) cap.innerHTML='The day <b style="color:var(--ink-soft)">after</b> · now it counts';
+      },3400);
+    }
+  }
+
+  playBtn.addEventListener('click',togglePlay);
+  document.getElementById('nextBtn').addEventListener('click',function(){ ended=false; next(); setPlayIcon(); });
+  document.getElementById('prevBtn').addEventListener('click',function(){ ended=false; prev(); setPlayIcon(); });
+  document.addEventListener('keydown',function(e){
+    if(e.code==='Space'){ e.preventDefault(); togglePlay(); }
+    else if(e.code==='ArrowRight'){ ended=false; next(); setPlayIcon(); }
+    else if(e.code==='ArrowLeft'){ ended=false; prev(); setPlayIcon(); }
+  });
+
+  // init
+  render();
+  if(reduce){ paused=true; setPlayIcon(); scenes.forEach(function(s){s.classList.add('active');});
+    // reduced-motion: show first only, manual nav
+    scenes.forEach(function(s,i){ s.classList.toggle('active',i===0); });
+  } else {
+    setPlayIcon(); startScene();
+  }
+})();
+</script>
