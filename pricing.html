@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pricing — ClasshubLMS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .page-hero { padding: 48px 0 30px; text-align: center; }
+  .page-hero h1 { font-size: clamp(30px, 4.4vw, 44px); font-weight: 700; }
+  .page-hero p.sub { font-size: 17px; color: var(--ink-600); max-width: 520px; margin: 14px auto 0; }
+
+  .price-card {
+    max-width: 440px; margin: 0 auto 60px; background: white; border: 2px solid var(--brand-600);
+    border-radius: 18px; padding: 36px 34px; text-align: center;
+  }
+  .price-card .amount { font-family: var(--font-mono); font-size: 52px; font-weight: 600; color: var(--brand-600); }
+  .price-card .period { font-size: 15px; color: var(--ink-600); margin-top: -6px; }
+  .price-card .feature-list { text-align: left; margin: 26px 0; display: flex; flex-direction: column; gap: 11px; }
+  .price-card .feature-list li { list-style: none; font-size: 14.5px; display: flex; align-items: start; gap: 9px; }
+  .price-card .feature-list li::before { content: "✓"; color: var(--brand-600); font-weight: 700; flex-shrink: 0; }
+  .price-card .btn-primary { width: 100%; text-align: center; }
+  .price-card .fine-print { font-size: 13px; color: var(--ink-600); margin-top: 14px; }
+
+  .honesty-note { max-width: 620px; margin: 0 auto 70px; text-align: center; }
+  .honesty-note p { font-size: 15px; color: var(--ink-600); }
+
+  .faq-section { max-width: 720px; margin: 0 auto 60px; }
+  .faq-section h2 { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 30px; }
+  .faq-item { border-bottom: 1px solid var(--paper-200); padding: 18px 0; }
+  .faq-item h3 { font-size: 15.5px; font-weight: 600; margin-bottom: 6px; }
+  .faq-item p { font-size: 14.5px; color: var(--ink-600); margin: 0; }
+
+  .final-cta { background: var(--brand-600); border-radius: 20px; padding: 44px; margin: 20px 0 40px; color: white; text-align: center; }
+  .final-cta h2 { font-size: clamp(22px, 3vw, 28px); font-weight: 700; }
+  .final-cta form.signup { margin: 20px auto 0; justify-content: center; max-width: 440px; }
+  .final-cta form.signup input[type="email"] { border: none; }
+  .final-cta form.signup button { background: white; color: var(--brand-700); }
+</style>
+</head>
+<body>
+  <nav class="site-nav">
+    <div class="wrap">
+      <a href="index.html" class="brand-mark"><span class="badge">C</span>ClasshubLMS</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="features.html">Features</a>
+        <a href="pricing.html" class="current">Pricing</a>
+        <a href="index.html#signup" class="nav-cta">Get early access</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="wrap">
+    <section class="page-hero">
+      <h1>Simple, honest pricing.</h1>
+      <p class="sub">One plan, $4.99 a month — with a full 30 days free to actually try it with a real class before you're charged anything.</p>
+    </section>
+
+    <div class="price-card">
+      <div class="amount">$4.99</div>
+      <div class="period">per month, after a free 30-day trial</div>
+      <ul class="feature-list">
+        <li>30 days free, full access — cancel any time before it ends and you're never charged</li>
+        <li>Unlimited classes and students</li>
+        <li>Every feature — quizzes, gradebook, Canvas import, co-teachers, parent accounts</li>
+        <li>Your own hosted, private class site</li>
+      </ul>
+      <a href="index.html#signup" class="btn-primary">Start your free 30 days</a>
+      <p class="fine-print">A card is required to start the trial, so nothing interrupts your class if you decide to continue — you're only charged if you don't cancel before day 30.</p>
+    </div>
+
+    <div class="honesty-note">
+      <p>Being upfront about where this is headed: pricing may change as ClasshubLMS grows, but anyone already on the $4.99 plan keeps that rate — you won't be moved to a higher price after the fact.</p>
+    </div>
+
+    <section class="faq-section">
+      <h2>Questions teachers actually ask</h2>
+      <div class="faq-item">
+        <h3>Do I need my district's approval to use this?</h3>
+        <p>No district contract or IT approval process is required to sign up — this works the same way tools like Wayground or DeltaMath do, as something you choose to use in your own classroom. That said, it's always worth knowing your own district's policy on third-party tools that touch student data.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is my students' data safe?</h3>
+        <p>Your class site is privately hosted and only accessible to people you've given a join code, class invite, or family code to. Security has been a priority from day one — especially given how this project started.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Will I actually be charged after 30 days?</h3>
+        <p>Only if you don't cancel first. Your card is on file so nothing interrupts mid-semester, but you can cancel any time from your account before the trial ends and you won't be charged at all.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Can my school pay instead of me?</h3>
+        <p>Right now billing is set up per individual teacher. If that's a blocker for your situation, reach out directly and we can figure out the right option.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What happens to my data if I cancel?</h3>
+        <p>It stays exactly where it is — nothing is deleted just for canceling. Reach out directly any time if you want your data exported or fully removed.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Can I bring my existing Canvas course over?</h3>
+        <p>Yes — export your course as a Canvas Common Cartridge (.imscc) file and it imports directly, including modules, assignments, and quiz questions with embedded images.</p>
+      </div>
+    </section>
+
+    <section class="final-cta">
+      <h2>Ready to try it for free?</h2>
+      <form class="signup" action="https://formspree.io/f/xjgnjnvd" method="POST">
+        <input type="email" name="email" placeholder="you@yourschool.edu" required />
+        <button type="submit">Get early access</button>
+      </form>
+    </section>
+  </div>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span class="copy">ClasshubLMS — built in a real classroom, for real classrooms.</span>
+      <div class="foot-links">
+        <a href="index.html">Home</a>
+        <a href="features.html">Features</a>
+        <a href="pricing.html">Pricing</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

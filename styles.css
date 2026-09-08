@@ -1,0 +1,106 @@
+:root {
+  --paper-50: #f6f8f6;
+  --paper-100: #eef2ee;
+  --paper-200: #d8e3db;
+  --ink-900: #1e2a22;
+  --ink-600: #55655c;
+  --brand-500: #2b6e52;
+  --brand-600: #1f5d45;
+  --brand-700: #16432f;
+  --red-pen: #a6362f;
+  --red-pen-bg: #fbeeed;
+  --gold: #8a5c17;
+  --gold-bg: #f2e0bd;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink-900);
+  background-color: var(--paper-50);
+  background-image:
+    linear-gradient(to right, rgba(43, 110, 82, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(43, 110, 82, 0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+  line-height: 1.55;
+}
+h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.01em; margin: 0; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+a { color: inherit; }
+img { max-width: 100%; }
+
+/* ---------- NAV ---------- */
+.site-nav {
+  border-bottom: 1px solid var(--paper-200);
+  background: rgba(246, 248, 246, 0.92);
+  backdrop-filter: blur(6px);
+  position: sticky; top: 0; z-index: 50;
+}
+.site-nav .wrap { display: flex; align-items: center; justify-content: space-between; padding-top: 14px; padding-bottom: 14px; }
+.brand-mark { display: inline-flex; align-items: center; gap: 9px; font-family: var(--font-display); font-weight: 600; font-size: 18px; text-decoration: none; }
+.brand-mark .badge { width: 27px; height: 27px; border-radius: 7px; background: var(--brand-600); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+.nav-links { display: flex; align-items: center; gap: 26px; font-size: 14.5px; font-weight: 500; }
+.nav-links a { text-decoration: none; color: var(--ink-600); }
+.nav-links a:hover, .nav-links a.current { color: var(--brand-700); }
+.nav-cta { background: var(--brand-600); color: white !important; padding: 9px 16px; border-radius: 8px; font-weight: 600; font-size: 14px; text-decoration: none; }
+.nav-cta:hover { background: var(--brand-700); }
+.nav-toggle { display: none; }
+@media (max-width: 720px) {
+  .nav-links { display: none; }
+  .nav-toggle { display: block; }
+}
+
+/* ---------- SHARED TYPE ---------- */
+.eyebrow-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.eyebrow-chip {
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.02em; color: var(--brand-600);
+  background: var(--paper-100); border: 1px solid var(--paper-200); padding: 5px 11px; border-radius: 999px;
+}
+.section-kicker {
+  font-family: var(--font-mono); font-size: 13px; color: var(--ink-600); letter-spacing: 0.02em;
+  display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+}
+.section-kicker .num { color: var(--brand-600); font-weight: 600; }
+.section-kicker::after { content: ""; flex: 1; height: 1px; background: var(--paper-200); }
+
+/* ---------- BUTTONS / FORM ---------- */
+.btn-primary {
+  background: var(--brand-600); color: white; border: none; font-family: var(--font-body); font-weight: 600;
+  font-size: 15px; padding: 13px 22px; border-radius: 9px; cursor: pointer; text-decoration: none; display: inline-block;
+}
+.btn-primary:hover { background: var(--brand-700); }
+.btn-outline {
+  background: transparent; color: var(--brand-700); border: 1.5px solid var(--brand-600); font-family: var(--font-body);
+  font-weight: 600; font-size: 15px; padding: 12px 20px; border-radius: 9px; cursor: pointer; text-decoration: none; display: inline-block;
+}
+.btn-outline:hover { background: var(--paper-100); }
+form.signup { display: flex; gap: 10px; flex-wrap: wrap; }
+form.signup input[type="email"] {
+  flex: 1; min-width: 220px; padding: 13px 16px; font-size: 15px; border: 1px solid var(--paper-200);
+  border-radius: 9px; font-family: var(--font-body); background: white;
+}
+form.signup input[type="email"]:focus { outline: none; border-color: var(--brand-600); box-shadow: 0 0 0 3px rgba(43,110,82,0.15); }
+form.signup button { background: var(--brand-600); color: white; border: none; font-family: var(--font-body); font-weight: 600; font-size: 15px; padding: 13px 22px; border-radius: 9px; cursor: pointer; }
+form.signup button:hover { background: var(--brand-700); }
+
+/* ---------- MOCKUP CARD SHELL ---------- */
+.mock-card { background: white; border: 1px solid var(--paper-200); border-radius: 14px; overflow: hidden; box-shadow: 0 8px 28px rgba(30, 42, 34, 0.06); }
+.mock-card .mock-head { padding: 12px 16px; border-bottom: 1px solid var(--paper-100); font-size: 12.5px; color: var(--ink-600); display: flex; justify-content: space-between; align-items: center; }
+.mock-card .mock-body { padding: 16px; }
+
+/* ---------- FOOTER ---------- */
+footer.site-footer { border-top: 1px solid var(--paper-200); margin-top: 60px; padding: 32px 0; }
+footer.site-footer .wrap { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
+footer.site-footer .foot-links { display: flex; gap: 20px; font-size: 13.5px; color: var(--ink-600); }
+footer.site-footer .foot-links a { text-decoration: none; }
+footer.site-footer .foot-links a:hover { color: var(--brand-700); }
+footer.site-footer .copy { font-size: 13px; color: var(--ink-600); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .fade-in { animation: fadeIn 0.5s ease-out both; }
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
